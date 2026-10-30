@@ -1,0 +1,29 @@
+{% extends 'catering/base.html' %}
+{% block content %}
+<h1>Administrative Catering Dashboard</h1>
+
+<div class="grid">
+    <section class="card" aria-label="Meal Generation Input Block">
+        <h2>Publish New Meal Option</h2>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">Publish to Menu</button>
+        </form>
+    </section>
+
+    <section class="card" aria-label="System Order Monitoring Ledger">
+        <h2>Global Enterprise Orders (Total Records: {{ all_orders.count }})</h2>
+        <div style="max-height: 400px; overflow-y: auto;">
+            {% for order in all_orders %}
+                <p style="border-bottom: 1px solid #ddd; padding-bottom: 0.5rem;">
+                    <strong>Account:</strong> {{ order.user.username }} | <strong>Selection:</strong> {{ order.meal_option.name }}<br>
+                    <small>Logged Timestamp: {{ order.created_at }}</small>
+                </p>
+            {% empty %}
+                <p>No transactions captured across the target enterprise network environment.</p>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

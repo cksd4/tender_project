@@ -1,0 +1,41 @@
+{% extends 'catering/base.html' %}
+{% block content %}
+<h1>Daily Catering Submissions Portal</h1>
+<p>Note: Menu adjustments require completion ahead of the daily <strong>10:00 AM threshold cutoff</strong>.</p>
+
+<section aria-label="Available Foods Matrix">
+    <h2>Active Food Profiles</h2>
+    <div class="grid">
+        {% for meal in meals %}
+            <div class="card">
+                <h3>{{ meal.name }}</h3>
+                <p>{{ meal.description }}</p>
+                <p><strong>Provider:</strong> {{ meal.vendor }}</p>
+                <p><strong>Cost:</strong> £{{ meal.price }}</p>
+                {% if meal.contains_allergens %}
+                    <p style="color: var(--warning)">⚠️ Content Profile: {{ meal.contains_allergens }}</p>
+                {% endif %}
+                <a href="{% url 'place_order' meal.id %}" class="btn">Submit Reservation</a>
+            </div>
+        {% empty %}
+            <p>No operational meal records have been updated for today's lunch matrix.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section aria-label="Historical Order Records" style="margin-top: 3rem;">
+    <h2>Your Tracked Submissions</h2>
+    <div class="card">
+        <ul>
+            {% for order in user_orders %}
+                <li style="margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+                    <span>{{ order.meal_option.name }} - Registered: {{ order.created_at|date:"d M Y H:i" }}</span>
+                    <a href="{% url 'cancel_order' order.id %}" class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.85rem;">Revoke Request</a>
+                </li>
+            {% empty %}
+                <li>You have no logged meal options pending execution.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+{% endblock %}
