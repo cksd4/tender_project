@@ -1,0 +1,42 @@
+{% extends 'catering/base.html' %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 2rem auto;" class="card">
+    <h1 style="margin-top: 0;">Create Your Account</h1>
+    <p>Sign up below to access the `tender_project` lunch reservation portal.</p>
+
+    <!-- Semantic, accessible form validation block -->
+    <form method="post" novalidate style="display: flex; flex-direction: column; gap: 1rem;">
+        {% csrf_token %}
+        
+        {% for field in form %}
+            <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                <label for="{{ field.id_for_label }}" style="font-weight: 600;">
+                    {{ field.label }}
+                </label>
+                
+                <!-- Renders the standard input dynamically while respecting accessibility hooks -->
+                {{ field }}
+                
+                {% if field.help_text %}
+                    <small style="color: #64748b;">{{ field.help_text }}</small>
+                {% endif %}
+                
+                {% if field.errors %}
+                    <span role="alert" style="color: var(--danger); font-size: 0.875rem;">
+                        {{ field.errors|striptags }}
+                    </span>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn" style="margin-top: 1rem; width: 100%;">
+            Verify & Register
+        </button>
+    </form>
+
+    <p style="margin-top: 1.5rem; font-size: 0.95rem; text-align: center;">
+        Already have an enterprise profile? <a href="{% url 'login' %}" style="color: var(--primary);">Log In Here</a>
+    </p>
+</div>
+{% endblock %}

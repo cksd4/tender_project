@@ -1,14 +1,38 @@
 {% extends 'catering/base.html' %}
 
 {% block content %}
-<section class="card">
-    <h1>Log in</h1>
-    <form method="post">
+<div style="max-width: 450px; margin: 3rem auto;" class="card">
+    <h1 style="margin-top: 0;">Sign In</h1>
+    <p>Provide your credentials to access your `tender_project` corporate dashboard.</p>
+
+    <!-- Secure submission form executing authentication protocols (3.1) -->
+    <form method="post" novalidate style="display: flex; flex-direction: column; gap: 1.25rem;">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="hidden" name="next" value="{{ next }}">
-        <button class="btn" type="submit">Log in</button>
+        
+        <!-- Non-field error banner layout (e.g., incorrect password alerts) -->
+        {% if form.non_field_errors %}
+            <div role="alert" style="background: #fee2e2; color: var(--danger); padding: 0.75rem; border-radius: 4px;">
+                {{ form.non_field_errors|striptags }}
+            </div>
+        {% endif %}
+
+        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+            <label id="username-label" for="id_username" style="font-weight: 600;">Username</label>
+            <input type="text" name="username" autofocus required id="id_username" autocomplete="username" style="padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px;">
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+            <label id="password-label" for="id_password" style="font-weight: 600;">Password</label>
+            <input type="password" name="password" required id="id_password" autocomplete="current-password" style="padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px;">
+        </div>
+
+        <button type="submit" class="btn" style="margin-top: 0.5rem; width: 100%;">
+            Secure Log In
+        </button>
     </form>
-    <p>Need an account? <a href="{% url 'register' %}">Sign up</a></p>
-</section>
+
+    <p style="margin-top: 1.5rem; font-size: 0.95rem; text-align: center;">
+        New to the network? <a href="{% url 'register' %}" style="color: var(--primary);">Create an account</a>
+    </p>
+</div>
 {% endblock %}
