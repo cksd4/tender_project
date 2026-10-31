@@ -43,7 +43,7 @@ def place_order(request, meal_id):
     Features automated loop scans to detect custom allergen match conditions.
     """
     meal = get_object_or_404(MealOption, id=meal_id)
-    current_time = timezone.localtime(timezone.now()).time()
+    current_time = datetime.datetime.now().time()
     cutoff_time = datetime.time(10, 0, 0) # 10:00 AM Strict Policy Constraint
 
     # Compound Conditional Checks (1.4)
