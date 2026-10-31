@@ -1,38 +1,38 @@
 {% extends 'catering/base.html' %}
 
 {% block content %}
-<div style="max-width: 450px; margin: 3rem auto;" class="card">
-    <h1 style="margin-top: 0;">Sign In</h1>
+<div class="card auth-card login-card">
+    <h1 class="auth-title">Sign In</h1>
     <p>Provide your credentials to access your `tender_project` corporate dashboard.</p>
 
     <!-- Secure submission form executing authentication protocols (3.1) -->
-    <form method="post" novalidate style="display: flex; flex-direction: column; gap: 1.25rem;">
+    <form method="post" novalidate class="auth-form login-form">
         {% csrf_token %}
         
         <!-- Non-field error banner layout (e.g., incorrect password alerts) -->
         {% if form.non_field_errors %}
-            <div role="alert" style="background: #fee2e2; color: var(--danger); padding: 0.75rem; border-radius: 4px;">
+            <div role="alert" class="login-error">
                 {{ form.non_field_errors|striptags }}
             </div>
         {% endif %}
 
-        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
-            <label id="username-label" for="id_username" style="font-weight: 600;">Username</label>
-            <input type="text" name="username" autofocus required id="id_username" autocomplete="username" style="padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px;">
+        <div class="form-field login-field">
+            <label id="username-label" for="id_username">Username</label>
+            <input type="text" name="username" autofocus required id="id_username" autocomplete="username">
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
-            <label id="password-label" for="id_password" style="font-weight: 600;">Password</label>
-            <input type="password" name="password" required id="id_password" autocomplete="current-password" style="padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px;">
+        <div class="form-field login-field">
+            <label id="password-label" for="id_password">Password</label>
+            <input type="password" name="password" required id="id_password" autocomplete="current-password">
         </div>
 
-        <button type="submit" class="btn" style="margin-top: 0.5rem; width: 100%;">
+        <button type="submit" class="btn auth-submit login-submit">
             Secure Log In
         </button>
     </form>
 
-    <p style="margin-top: 1.5rem; font-size: 0.95rem; text-align: center;">
-        New to the network? <a href="{% url 'register' %}" style="color: var(--primary);">Create an account</a>
+    <p class="auth-footer">
+        New to the network? <a href="{% url 'register' %}" class="auth-link">Create an account</a>
     </p>
 </div>
 {% endblock %}

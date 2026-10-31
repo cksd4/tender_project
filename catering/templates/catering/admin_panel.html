@@ -13,17 +13,24 @@
     </section>
 
     <section class="card" aria-label="System Order Monitoring Ledger">
-        <h2>Global Enterprise Orders (Total Records: {{ all_orders.count }})</h2>
-        <div style="max-height: 400px; overflow-y: auto;">
-            {% for order in all_orders %}
-                <p style="border-bottom: 1px solid #ddd; padding-bottom: 0.5rem;">
-                    <strong>Account:</strong> {{ order.user.username }} | <strong>Selection:</strong> {{ order.meal_option.name }}<br>
-                    <small>Logged Timestamp: {{ order.created_at }}</small>
-                </p>
-            {% empty %}
-                <p>No transactions captured across the target enterprise network environment.</p>
-            {% endfor %}
-        </div>
-    </section>
+    <h2>Active Menu Listings (Total: {{ all_meals.count }})</h2>
+    <div style="max-height: 400px; overflow-y: auto;">
+        {% for meal in all_meals %}
+            <div style="border-bottom: 1px solid #ddd; padding: 0.75rem 0; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong>{{ meal.name }}</strong> - £{{ meal.price }}<br>
+                    <small>Vendor: {{ meal.vendor }} | Active: {{ meal.is_active }}</small>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <a href="{% url 'edit_meal' meal.id %}" class="btn" style="background: var(--warning); padding: 0.25rem 0.5rem; font-size: 0.85rem;">Edit</a>
+                    <a href="{% url 'delete_meal' meal.id %}" class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.85rem;" onclick="return confirm('Are you sure you want to permanently delete this meal option?')">Delete</a>
+                </div>
+            </div>
+        {% empty %}
+            <p>No transactions captured across the target enterprise network environment.</p>
+        {% endfor %}
+    </div>
+</section>
+
 </div>
 {% endblock %}

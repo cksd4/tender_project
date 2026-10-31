@@ -110,3 +110,41 @@ def admin_panel(request):
         'form': form,
     }
     return render(request, 'catering/admin_panel.html', context)
+
+@login_required
+def edit_meal(request, meal_id):
+    """
+    Handles the UPDATE phase of CRUD for menu profiles.
+    Verifies that only authorized Admin profiles can alter database assets.
+    """
+    if request.user.role != 'admin':
+        messages.error(request, "Access Terminated: Insufficient administrative privileges.")
+        return redirect('dashboard')
+        
+    meal = get_object_or_404(MealOption, id=meal_id)
+    
+    if request.method == 'POST':
+        form = MealOptionForm(request.POST, instance=meal)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"'{meal.name}' was modified successfully.")
+            return redirect('admin_panel')
+    else:
+        form = MealOptionForm(instance=meal)
+        
+    return render(request, 'catering/edit_meal.html', {'form': form, 'meal': meal})
+
+@login_required
+def delete_meal(request, meal_id):
+    """
+    Handles the DELETE phase of CRUD for menu records.
+    """
+    if request.user.role != 'admin':
+        messages.error(request, "Access Terminated: Insufficient administrative privileges.")
+        return redirect('dashboard')
+        
+    meal = get_object_or_404(MealOption, id=meal_id)
+    meal_name = meal.name
+    meal.delete()
+    messages.info(request, f"Menu option '{meal_name}' has been deleted.")
+    return redirect('admin_panel')

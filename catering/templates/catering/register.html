@@ -1,17 +1,17 @@
 {% extends 'catering/base.html' %}
 
 {% block content %}
-<div style="max-width: 500px; margin: 2rem auto;" class="card">
-    <h1 style="margin-top: 0;">Create Your Account</h1>
+<div class="card auth-card register-card">
+    <h1 class="auth-title">Create Your Account</h1>
     <p>Sign up below to access the `tender_project` lunch reservation portal.</p>
 
     <!-- Semantic, accessible form validation block -->
-    <form method="post" novalidate style="display: flex; flex-direction: column; gap: 1rem;">
+    <form method="post" novalidate class="auth-form register-form">
         {% csrf_token %}
         
         {% for field in form %}
-            <div style="display: flex; flex-direction: column; gap: 0.25rem;">
-                <label for="{{ field.id_for_label }}" style="font-weight: 600;">
+            <div class="form-field">
+                <label for="{{ field.id_for_label }}" class="field-label">
                     {{ field.label }}
                 </label>
                 
@@ -19,24 +19,24 @@
                 {{ field }}
                 
                 {% if field.help_text %}
-                    <small style="color: #64748b;">{{ field.help_text }}</small>
+                    <small class="field-help">{{ field.help_text }}</small>
                 {% endif %}
                 
                 {% if field.errors %}
-                    <span role="alert" style="color: var(--danger); font-size: 0.875rem;">
+                    <span role="alert" class="field-error">
                         {{ field.errors|striptags }}
                     </span>
                 {% endif %}
             </div>
         {% endfor %}
 
-        <button type="submit" class="btn" style="margin-top: 1rem; width: 100%;">
+        <button type="submit" class="btn auth-submit register-submit">
             Verify & Register
         </button>
     </form>
 
-    <p style="margin-top: 1.5rem; font-size: 0.95rem; text-align: center;">
-        Already have an enterprise profile? <a href="{% url 'login' %}" style="color: var(--primary);">Log In Here</a>
+    <p class="auth-footer">
+        Already have an enterprise profile? <a href="{% url 'login' %}" class="auth-link">Log In Here</a>
     </p>
 </div>
 {% endblock %}

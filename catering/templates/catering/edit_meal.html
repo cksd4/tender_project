@@ -1,0 +1,17 @@
+{% extends 'catering/base.html' %}
+{% block content %}
+<div class="card edit-meal-card">
+    <h1>Modify Menu Option</h1>
+    <p>Updating specifications for: <strong>{{ meal.name }}</strong></p>
+
+    <form method="post" novalidate class="edit-meal-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        
+        <div class="edit-meal-actions">
+            <button type="submit" class="btn edit-meal-save">Save Structural Changes</button>
+            <a href="{% url 'admin_panel' %}" class="btn edit-meal-cancel">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

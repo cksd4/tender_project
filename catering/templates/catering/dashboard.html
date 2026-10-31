@@ -13,7 +13,7 @@
                 <p><strong>Provider:</strong> {{ meal.vendor }}</p>
                 <p><strong>Cost:</strong> £{{ meal.price }}</p>
                 {% if meal.contains_allergens %}
-                    <p style="color: var(--warning)">⚠️ Content Profile: {{ meal.contains_allergens }}</p>
+                    <p class="allergen-notice">⚠️ Content Profile: {{ meal.contains_allergens }}</p>
                 {% endif %}
                 <a href="{% url 'place_order' meal.id %}" class="btn">Submit Reservation</a>
             </div>
@@ -23,14 +23,14 @@
     </div>
 </section>
 
-<section aria-label="Historical Order Records" style="margin-top: 3rem;">
+<section aria-label="Historical Order Records" class="order-history">
     <h2>Your Tracked Submissions</h2>
     <div class="card">
         <ul>
             {% for order in user_orders %}
-                <li style="margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+                <li class="order-item">
                     <span>{{ order.meal_option.name }} - Registered: {{ order.created_at|date:"d M Y H:i" }}</span>
-                    <a href="{% url 'cancel_order' order.id %}" class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.85rem;">Revoke Request</a>
+                    <a href="{% url 'cancel_order' order.id %}" class="btn btn-danger revoke-btn">Revoke Request</a>
                 </li>
             {% empty %}
                 <li>You have no logged meal options pending execution.</li>

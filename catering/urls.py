@@ -10,4 +10,7 @@ urlpatterns = [
     path('order/place/<int:meal_id>/', views.place_order, name='place_order'),
     path('order/cancel/<int:order_id>/', views.cancel_order, name='cancel_order'),
     path('admin-management/', views.admin_panel, name='admin_panel'),
+        path('admin-management/edit/<int:meal_id>/', views.edit_meal, name='edit_meal'),
+    path('admin-management/delete/<int:meal_id>/', views.delete_meal, name='delete_meal'),
+
 ]
