@@ -2,7 +2,7 @@
 # Catering Management System
 
 ## Project Name: tender_project
-BiteWise (`tender_project`) is an accessible, responsive full-stack Django web application engineered to manage corporate catering operations. The system helps office employees pre-order weekly lunch options while enforcing strict operational cut-off constraints (10:00 AM) and cross-referencing dietary allergies automatically via custom database structures.
+Tender (`tender_project`) is an accessible, responsive full-stack Django web application engineered to manage corporate catering operations. The system helps office employees pre-order weekly lunch options while enforcing strict operational cut-off constraints (10:00 AM) and cross-referencing dietary allergies automatically via custom database structures.
 
 ---
 
