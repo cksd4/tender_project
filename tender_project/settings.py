@@ -27,6 +27,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -66,3 +67,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Automatic post-authentication routing configurations
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'login'
+
+import dj_database_url
+
+# Heroku Database Routing Configuration Layer
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
+
+# WhiteNoise Storage Optimization Engine for external stylesheets
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
