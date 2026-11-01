@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tender Project - Corporate Catering</title>
+    <title>Tender - Corporate Catering</title>
     
     <!-- Link to your external stylesheet asset -->
     <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}">
@@ -12,7 +12,7 @@
 <body>
 
     <nav aria-label="Primary Navigation System" class="main-nav">
-        <a href="{% url 'dashboard' %}" class="nav-brand">tender_project</a>
+        <a href="{% url 'dashboard' %}" class="nav-brand">Tender</a>
         <div class="nav-actions">
             {% if user.is_authenticated %}
                 <span class="user-status">User: <strong>{{ user.username }}</strong> ({{ user.role }})</span>
