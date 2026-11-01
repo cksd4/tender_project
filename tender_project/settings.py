@@ -57,6 +57,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'catering.context_processors.session_timeout',
             ],
         },
     },
@@ -76,3 +77,17 @@ DATABASES['default'].update(db_from_env)
 
 # WhiteNoise Storage Optimization Engine for external stylesheets
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+ #Force the active session to expire completely when the user closes their browser
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# If a user is inactive for this long, Django flushes their authentication token data.
+SESSION_COOKIE_AGE = 10
+
+# Automatically refresh the expiration countdown timer every time the user clicks a page
+SESSION_SAVE_EVERY_REQUEST = True
+
+# Automatic post-authentication routing configurations
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = 'login'

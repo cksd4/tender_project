@@ -1,5 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.conf import settings
+from django.urls import reverse
 from .models import MealOption
 
 User = get_user_model()
@@ -24,6 +26,26 @@ class TenderProjectTestCase(TestCase):
     def test_user_role_assignment(self):
         """Validates role parameters store accurately inside user custom attributes."""
         self.assertEqual(self.employee.role, 'employee')
+
+    def test_sign_out_returns_user_to_login_page(self):
+        self.client.force_login(self.employee)
+
+        response = self.client.post(reverse('logout'), follow=True)
+
+        self.assertRedirects(response, reverse('login'))
+        self.assertContains(response, 'Sign In')
+        self.assertNotIn('_auth_user_id', self.client.session)
+
+    def test_authenticated_page_loads_session_timeout_script(self):
+        self.client.force_login(self.employee)
+
+        response = self.client.get(reverse('dashboard'))
+
+        self.assertContains(
+            response,
+            f'data-idle-timeout-seconds="{settings.SESSION_COOKIE_AGE}"',
+        )
+        self.assertContains(response, 'assets/js/session_timeout.js')
 
     def test_allergen_detection_logic(self):
         """Confirms backend allergen string loop processing performs accurate character scans."""

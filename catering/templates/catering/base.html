@@ -11,7 +11,7 @@
 </head>
 <body>
 
-    <nav aria-label="Primary Navigation System" class="main-nav">
+    <nav aria-label="Primary Navigation System" class="main-nav" data-idle-timeout-seconds="{{ session_timeout_seconds }}">
         <a href="{% url 'dashboard' %}" class="nav-brand">Tender</a>
         <div class="nav-actions">
             {% if user.is_authenticated %}
@@ -19,7 +19,10 @@
                 {% if user.role == 'admin' %}
                     <a href="{% url 'admin_panel' %}" class="ui-btn ui-btn-outline">Admin Actions</a>
                 {% endif %}
-                <a href="{% url 'logout' %}" class="ui-btn ui-btn-danger">Sign Out</a>
+                <form id="logout-form" method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="ui-btn ui-btn-danger">Sign Out</button>
+                </form>
             {% else %}
                 <a href="{% url 'login' %}" class="ui-btn ui-btn-outline">Log In</a>
                 <a href="{% url 'register' %}" class="ui-btn ui-btn-outline">Sign Up</a>
@@ -41,6 +44,9 @@
 
         {% block content %}{% endblock %}
     </main>
-
+    <!-- External JavaScript Session Security Script (LO3/LO4) -->
+    {% if user.is_authenticated %}
+        <script src="{% static 'assets/js/session_timeout.js' %}"></script>
+    {% endif %}
 </body>
 </html>
