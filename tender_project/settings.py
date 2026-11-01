@@ -82,7 +82,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # If a user is inactive for this long, Django flushes their authentication token data.
-SESSION_COOKIE_AGE = 10
+SESSION_COOKIE_AGE = 1800  # 30 minutes in seconds
 
 # Automatically refresh the expiration countdown timer every time the user clicks a page
 SESSION_SAVE_EVERY_REQUEST = True
