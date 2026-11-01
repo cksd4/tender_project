@@ -1,90 +1,27 @@
+/* ==========================================================================
+   TENDER_PROJECT GLOBAL VARIANT & BRAND THEME DEFINITIONS
+   ========================================================================== */
 :root {
-    --primary: #1e3a8a;
-    --success: #15803d;
-    --warning: #b45309;
-    --danger: #b91c1c;
-    --light: #f8fafc;
-    --dark: #0f172a;
+    --brand-primary: #1e3a8a;
+    --brand-success: #15803d;
+    --brand-warning: #b45309;
+    --brand-danger: #b91c1c;
+    --brand-light: #f8fafc;
+    --brand-dark: #0f172a;
+    --border-color: #cbd5e1;
+    --radius-md: 8px;
+    --radius-sm: 4px;
 }
 
+/* Base Body Configuration */
 body {
+    background-color: var(--brand-light);
+    color: var(--brand-dark);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     margin: 0;
-    background: var(--light);
-    color: var(--dark);
 }
 
-.navbar {
-    background: var(--primary);
-    color: white;
-    padding: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.navbar a {
-    color: white;
-    text-decoration: none;
-    padding: 0.5rem;
-}
-
-.navbar-brand {
-    font-weight: bold;
-    font-size: 1.25rem;
-}
-
-.navbar-admin-link {
-    border: 1px solid white;
-    margin-left: 10px;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-}
-
-.alert {
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 4px;
-    color: white;
-}
-
-.alert-success { background: var(--success); }
-.alert-error { background: var(--danger); }
-.alert-warning { background: var(--warning); }
-.alert-info { background: var(--primary); }
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1rem;
-}
-
-.card {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.btn {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    text-decoration: none;
-    color: white;
-    background: var(--primary);
-    border: none;
-    cursor: pointer;
-}
-
-.btn-danger { background: var(--danger); }
-
+/* Accessibility Fallback Utility */
 .visually-hidden {
     position: absolute;
     width: 1px;
@@ -96,111 +33,173 @@ body {
     border: 0;
 }
 
-.allergen-notice { color: var(--warning); }
-.order-history { margin-top: 3rem; }
-
-.order-item {
-    margin-bottom: 0.5rem;
+/* ==========================================================================
+   NAVIGATION BAR MARGINS & THEME SHELLS (3.2)
+   ========================================================================== */
+.main-nav {
+    background-color: var(--brand-primary);
+    color: white;
+    padding: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.revoke-btn {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.85rem;
-}
-
-.order-ledger {
-    max-height: 400px;
-    overflow-y: auto;
-}
-
-.order-record {
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 0.5rem;
-}
-
-.auth-card { margin: 3rem auto; }
-.login-card { max-width: 450px; }
-.register-card { max-width: 500px; margin-top: 2rem; }
-.auth-title { margin-top: 0; }
-
-.auth-form,
-.form-field {
-    display: flex;
-    flex-direction: column;
-}
-
-.login-form { gap: 1.25rem; }
-.register-form { gap: 1rem; }
-.form-field { gap: 0.25rem; }
-.field-label,
-.login-field label { font-weight: 600; }
-
-.login-field input,
-.register-form input,
-.register-form select {
+.main-nav a {
+    color: white;
+    text-decoration: none;
     padding: 0.5rem;
-    border: 1px solid #cbd5e1;
-    border-radius: 4px;
 }
 
-.field-help { color: #64748b; }
-.field-error { color: var(--danger); font-size: 0.875rem; }
-
-.login-error {
-    background: #fee2e2;
-    color: var(--danger);
-    padding: 0.75rem;
-    border-radius: 4px;
+.nav-brand {
+    font-weight: bold;
+    font-size: 1.25rem;
 }
 
-.auth-submit { width: 100%; }
-.login-submit { margin-top: 0.5rem; }
-.register-submit { margin-top: 1rem; }
-
-.auth-footer {
-    margin-top: 1.5rem;
-    font-size: 0.95rem;
-    text-align: center;
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
-.auth-link { color: var(--primary); }
-
-.edit-meal-card {
-    max-width: 600px;
+/* ==========================================================================
+   FLUID GRID SYSTEMS & RESPONSIVE COMPONENT TILES (1.1)
+   ========================================================================== */
+.app-container {
+    max-width: 1200px;
     margin: 2rem auto;
+    padding: 0 1rem;
 }
 
-.edit-meal-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.edit-meal-actions {
-    display: flex;
-    gap: 1rem;
+/* Dynamic Grid Layout that wraps on Mobile and matches tablet views */
+.meal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
     margin-top: 1rem;
 }
 
-.edit-meal-save,
-.edit-meal-cancel {
-    flex: 1;
+/* Interactive Base Card Layouts */
+.ui-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
-.edit-meal-save { background: var(--success); }
-.edit-meal-cancel { background: #64748b; text-align: center; }
+.ui-card-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
 
-@media (max-width: 480px) {
-    .order-item {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
+/* Split Column Layout for Administration Monitoring Screens */
+.admin-split-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
 
-    .edit-meal-actions {
-        flex-direction: column;
-    }
+.admin-col-form {
+    flex: 1 1 400px;
+}
+
+.admin-col-logs {
+    flex: 2 1 500px;
+}
+
+/* ==========================================================================
+   INTERFACE INTERACTION BUTTONS & COMPONENT LABELS
+   ========================================================================== */
+.ui-btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: white;
+    background-color: var(--brand-primary);
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: center;
+    transition: opacity 0.15s ease;
+}
+
+.ui-btn:hover {
+    opacity: 0.9;
+}
+
+.ui-btn-danger { background-color: var(--brand-danger); }
+.ui-btn-warning { background-color: var(--brand-warning); }
+.ui-btn-success { background-color: var(--brand-success); }
+.ui-btn-outline { background-color: transparent; border: 1px solid white; }
+
+/* Status Badges */
+.ui-badge {
+    background-color: var(--brand-danger);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+/* ==========================================================================
+   USER SYSTEM MESSAGES & SYSTEM FORM INPUT FIELDS
+   ========================================================================== */
+.ui-alert {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: var(--radius-sm);
+    color: white;
+}
+
+.ui-alert-success { background-color: var(--brand-success); }
+.ui-alert-error { background-color: var(--brand-danger); }
+.ui-alert-warning { background-color: var(--brand-warning); }
+.ui-alert-info { background-color: var(--brand-primary); }
+
+/* Form Field Inputs Configuration Matrix */
+form p {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+form input[type="text"],
+form input[type="number"],
+form input[type="password"],
+form textarea,
+form select {
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    background-color: white;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Internal Logs List Element Shells */
+.scroll-log-box {
+    max-height: 450px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+}
+
+.log-item {
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem;
+}
+
+.log-item:last-child {
+    border-bottom: none;
 }

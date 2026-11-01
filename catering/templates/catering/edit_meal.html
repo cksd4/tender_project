@@ -1,16 +1,16 @@
 {% extends 'catering/base.html' %}
 {% block content %}
-<div class="card edit-meal-card">
+<div style="max-width: 600px; margin: 3rem auto;" class="ui-card">
     <h1>Modify Menu Option</h1>
-    <p>Updating specifications for: <strong>{{ meal.name }}</strong></p>
+    <p style="color: #64748b;">Updating specifications for: <strong>{{ meal.name }}</strong></p>
 
-    <form method="post" novalidate class="edit-meal-form">
+    <form method="post" novalidate>
         {% csrf_token %}
         {{ form.as_p }}
         
-        <div class="edit-meal-actions">
-            <button type="submit" class="btn edit-meal-save">Save Structural Changes</button>
-            <a href="{% url 'admin_panel' %}" class="btn edit-meal-cancel">Cancel</a>
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+            <button type="submit" class="ui-btn ui-btn-success" style="flex: 1;">Save Structural Changes</button>
+            <a href="{% url 'admin_panel' %}" class="ui-btn" style="background-color: #64748b; text-align: center; flex: 1;">Cancel</a>
         </div>
     </form>
 </div>

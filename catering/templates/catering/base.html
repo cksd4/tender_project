@@ -5,31 +5,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tender Project - Corporate Catering</title>
+    
+    <!-- Link to your external stylesheet asset -->
     <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}">
 </head>
 <body>
 
-    <nav aria-label="Primary Navigation System" class="navbar">
-        <a href="{% url 'dashboard' %}" class="navbar-brand">tender_project</a>
-        <div>
+    <nav aria-label="Primary Navigation System" class="main-nav">
+        <a href="{% url 'dashboard' %}" class="nav-brand">tender_project</a>
+        <div class="nav-actions">
             {% if user.is_authenticated %}
                 <span class="user-status">User: <strong>{{ user.username }}</strong> ({{ user.role }})</span>
                 {% if user.role == 'admin' %}
-                    <a href="{% url 'admin_panel' %}" class="navbar-admin-link">Admin Actions</a>
+                    <a href="{% url 'admin_panel' %}" class="ui-btn ui-btn-outline">Admin Actions</a>
                 {% endif %}
-                <a href="{% url 'logout' %}">Sign Out</a>
+                <a href="{% url 'logout' %}" class="ui-btn ui-btn-danger">Sign Out</a>
             {% else %}
-                <a href="{% url 'login' %}">Log In</a>
-                <a href="{% url 'register' %}">Sign Up</a>
+                <a href="{% url 'login' %}" class="ui-btn ui-btn-outline">Log In</a>
+                <a href="{% url 'register' %}" class="ui-btn ui-btn-outline">Sign Up</a>
             {% endif %}
         </div>
     </nav>
 
-    <main class="container">
+    <main class="app-container">
+        <!-- System User Notification Framework Messages (2.3) -->
         {% if messages %}
             <div role="alert">
                 {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}">
+                    <div class="ui-alert ui-alert-{{ message.tags }}">
                         {{ message }}
                     </div>
                 {% endfor %}

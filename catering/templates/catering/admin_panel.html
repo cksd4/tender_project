@@ -2,35 +2,35 @@
 {% block content %}
 <h1>Administrative Catering Dashboard</h1>
 
-<div class="grid">
-    <section class="card" aria-label="Meal Generation Input Block">
+<div class="admin-split-layout">
+    <!-- Form Segment -->
+    <section class="admin-col-form ui-card" aria-label="Meal Generation Input Block">
         <h2>Publish New Meal Option</h2>
         <form method="post" novalidate>
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn">Publish to Menu</button>
+            <button type="submit" class="ui-btn ui-btn-success" style="width: 100%; margin-top: 1rem;">Publish to Menu</button>
         </form>
     </section>
 
-    <section class="card" aria-label="System Order Monitoring Ledger">
-    <h2>Active Menu Listings (Total: {{ all_meals.count }})</h2>
-    <div style="max-height: 400px; overflow-y: auto;">
-        {% for meal in all_meals %}
-            <div style="border-bottom: 1px solid #ddd; padding: 0.75rem 0; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <strong>{{ meal.name }}</strong> - £{{ meal.price }}<br>
-                    <small>Vendor: {{ meal.vendor }} | Active: {{ meal.is_active }}</small>
+    <!-- Global Monitoring Activity Logs Box -->
+    <section class="admin-col-logs ui-card" aria-label="System Order Monitoring Ledger">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h2>Global Enterprise Orders</h2>
+            <span class="ui-badge" style="background-color: var(--brand-primary);">Total Count: {{ all_orders.count }}</span>
+        </div>
+        
+        <div class="scroll-log-box">
+            {% for order in all_orders %}
+                <div class="log-item">
+                    <p style="margin: 0 0 0.25rem 0;"><strong>Account:</strong> {{ order.user.username }}</p>
+                    <p style="margin: 0 0 0.5rem 0; color: var(--brand-primary);"><strong>Selection:</strong> {{ order.meal_option.name }}</p>
+                    <small style="color: #64748b;">Logged Timestamp: {{ order.created_at }}</small>
                 </div>
-                <div style="display: flex; gap: 0.5rem;">
-                    <a href="{% url 'edit_meal' meal.id %}" class="btn" style="background: var(--warning); padding: 0.25rem 0.5rem; font-size: 0.85rem;">Edit</a>
-                    <a href="{% url 'delete_meal' meal.id %}" class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.85rem;" onclick="return confirm('Are you sure you want to permanently delete this meal option?')">Delete</a>
-                </div>
-            </div>
-        {% empty %}
-            <p>No transactions captured across the target enterprise network environment.</p>
-        {% endfor %}
-    </div>
-</section>
-
+            {% empty %}
+                <div style="padding: 2rem; text-align: center; color: #64748b;">No transactions captured across the target enterprise network environment.</div>
+            {% endfor %}
+        </div>
+    </section>
 </div>
 {% endblock %}
