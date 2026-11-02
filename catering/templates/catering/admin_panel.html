@@ -33,4 +33,32 @@
         </div>
     </section>
 </div>
+
+<section class="ui-card" aria-label="Menu option management" style="margin-top: 2rem;">
+    <h2>Manage Menu Options</h2>
+    <div class="scroll-log-box">
+        {% for meal in all_meals %}
+            <div class="log-item" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <strong>{{ meal.name }}</strong>
+                    <span class="ui-badge">{% if meal.is_active %}Active{% else %}Inactive{% endif %}</span>
+                    {% if meal.order_count %}
+                        <small style="display: block; color: #64748b;">Used by {{ meal.order_count }} order{{ meal.order_count|pluralize }}; cannot be removed.</small>
+                    {% endif %}
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <a href="{% url 'edit_meal' meal.id %}" class="ui-btn">Edit</a>
+                    {% if not meal.order_count %}
+                        <form method="post" action="{% url 'delete_meal' meal.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="ui-btn ui-btn-danger">Remove</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p>No menu options have been added yet.</p>
+        {% endfor %}
+    </div>
+</section>
 {% endblock %}

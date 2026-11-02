@@ -3,7 +3,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Count
 from django.utils import timezone
+from django.views.decorators.http import require_POST
 from .models import MealOption, Order
 from .forms import ExtendedRegistrationForm, MealOptionForm
 
@@ -92,7 +94,7 @@ def admin_panel(request):
         messages.error(request, "Access Terminated: Insufficient administrative privileges.")
         return redirect('dashboard')
 
-    all_meals = MealOption.objects.all()
+    all_meals = MealOption.objects.annotate(order_count=Count('ordered_meals'))
     all_orders = Order.objects.all()
     
     if request.method == 'POST':
@@ -135,6 +137,7 @@ def edit_meal(request, meal_id):
     return render(request, 'catering/edit_meal.html', {'form': form, 'meal': meal})
 
 @login_required
+@require_POST
 def delete_meal(request, meal_id):
     """
     Handles the DELETE phase of CRUD for menu records.
@@ -144,6 +147,10 @@ def delete_meal(request, meal_id):
         return redirect('dashboard')
         
     meal = get_object_or_404(MealOption, id=meal_id)
+    if meal.ordered_meals.exists():
+        messages.error(request, f"'{meal.name}' cannot be removed because it is used by existing orders.")
+        return redirect('admin_panel')
+
     meal_name = meal.name
     meal.delete()
     messages.info(request, f"Menu option '{meal_name}' has been deleted.")

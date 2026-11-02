@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.urls import reverse
-from .models import MealOption
+from .models import MealOption, Order
 
 User = get_user_model()
 
@@ -54,3 +54,33 @@ class TenderProjectTestCase(TestCase):
         
         has_match = any(allergen in meal_allergens for allergen in user_allergens)
         self.assertTrue(has_match)
+
+    def test_admin_panel_shows_menu_option_actions(self):
+        admin = User.objects.create_user(username='cateringadmin', password='securepassword1', role='admin')
+        self.client.force_login(admin)
+
+        response = self.client.get(reverse('admin_panel'))
+
+        self.assertContains(response, 'Manage Menu Options')
+        self.assertContains(response, reverse('edit_meal', args=[self.meal.id]))
+        self.assertContains(response, reverse('delete_meal', args=[self.meal.id]))
+
+    def test_admin_can_remove_menu_option_without_orders(self):
+        admin = User.objects.create_user(username='cateringadmin', password='securepassword1', role='admin')
+        self.client.force_login(admin)
+
+        response = self.client.post(reverse('delete_meal', args=[self.meal.id]), follow=True)
+
+        self.assertRedirects(response, reverse('admin_panel'))
+        self.assertFalse(MealOption.objects.filter(id=self.meal.id).exists())
+
+    def test_admin_cannot_remove_menu_option_used_by_orders(self):
+        admin = User.objects.create_user(username='cateringadmin', password='securepassword1', role='admin')
+        Order.objects.create(user=self.employee, meal_option=self.meal)
+        self.client.force_login(admin)
+
+        response = self.client.post(reverse('delete_meal', args=[self.meal.id]), follow=True)
+
+        self.assertRedirects(response, reverse('admin_panel'))
+        self.assertTrue(MealOption.objects.filter(id=self.meal.id).exists())
+        self.assertContains(response, 'cannot be removed because it is used by existing orders')
