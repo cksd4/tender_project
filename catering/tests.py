@@ -32,9 +32,15 @@ class TenderProjectTestCase(TestCase):
 
         response = self.client.post(reverse('logout'), follow=True)
 
-        self.assertRedirects(response, reverse('login'))
-        self.assertContains(response, 'Sign In')
+        self.assertRedirects(response, reverse('employee_login'))
+        self.assertContains(response, 'Employee Hub')
         self.assertNotIn('_auth_user_id', self.client.session)
+
+    def test_employee_login_page_renders(self):
+        response = self.client.get(reverse('employee_login'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Employee Hub')
 
     def test_authenticated_page_loads_session_timeout_script(self):
         self.client.force_login(self.employee)

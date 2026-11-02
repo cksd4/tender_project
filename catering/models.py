@@ -4,18 +4,23 @@ from django.utils import timezone
 
 class UserProfile(AbstractUser):
     """
-    Extends standard auth logic to isolate operational roles and allergies.
-    Complies with structural PascalCase object naming rules.
+    Extends built-in auth user to isolate roles, phone details, and allergens.
     """
     ROLE_CHOICES = [
         ('employee', 'Employee'),
         ('admin', 'Office Admin'),
     ]
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='employee')
+    phone_number = models.CharField(
+        max_length=15,
+        blank=True,
+        default='',
+        help_text="Enter contact phone number"
+    )
     allergen_free_text = models.CharField(
         max_length=100, 
         blank=True, 
-        help_text="Provide comma-separated listings (e.g., peanuts, dairy, gluten)"
+        help_text="Provide comma-separated values (e.g., peanuts, dairy, gluten)"
     )
 
     def __str__(self):

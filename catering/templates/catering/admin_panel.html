@@ -46,10 +46,10 @@
                         <small style="display: block; color: #64748b;">Used by {{ meal.order_count }} order{{ meal.order_count|pluralize }}; cannot be removed.</small>
                     {% endif %}
                 </div>
-                <div style="display: flex; gap: 0.5rem;">
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
                     <a href="{% url 'edit_meal' meal.id %}" class="ui-btn">Edit</a>
-                    {% if not meal.order_count %}
-                        <form method="post" action="{% url 'delete_meal' meal.id %}">
+                    {% if meal.order_count|default:0 == 0 %}
+                        <form method="post" action="{% url 'delete_meal' meal.id %}" style="margin: 0;">
                             {% csrf_token %}
                             <button type="submit" class="ui-btn ui-btn-danger">Remove</button>
                         </form>

@@ -57,6 +57,16 @@ python manage.py test
 | **TC-02:** Place Order After 10 AM | Application intercepts execution; throws explicit deadline error. | System blocks submission; safely redirects with message banner. | **PASS** |
 | **TC-03:** Horizontal Authorization Block | Basic user manually routing to `/admin-management/` triggers block. | View intercepts request; issues insufficient permissions error. | **PASS** |
 
+### Debugging & Fix Log
+
+| Issue | Resolution |
+| :--- | :--- |
+| Signing out did not return to the login page. | Changed sign-out to use a CSRF-protected POST form compatible with Django's logout view. |
+| Automatic idle logout waited for activity or did not use the configured timeout. | Corrected the JavaScript static path, aligned the idle timer with Django's session timeout, and submitted the POST logout form automatically. |
+| Admins could not find menu edit or remove controls. | Added a menu management list to the admin page; removal uses POST and is blocked for options linked to existing orders. |
+| `runserver` failed importing `views` from `tender_project`. | Updated the project URL configuration to import views from the `catering` app. |
+| The employee login page raised `NoReverseMatch` for the missing `login` URL name. | Updated login links and redirects to use the configured `employee_login` URL name. |
+
 ---
 
 ## 🚀 5. Secure Deployment Checklist (Rubric 5.2, 6.2, 6.3)

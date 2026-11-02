@@ -13,7 +13,6 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 # Allow localized hosting alongside generic production domains
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com',] 
 ROOT_URLCONF = 'tender_project.urls'
-LOGIN_URL = 'login'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -66,9 +65,6 @@ TEMPLATES = [
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Automatic post-authentication routing configurations
-LOGIN_REDIRECT_URL = 'dashboard'
-LOGOUT_REDIRECT_URL = 'login'
-
 import dj_database_url
 
 # Heroku Database Routing Configuration Layer
@@ -87,7 +83,11 @@ SESSION_COOKIE_AGE = 1800  # 30 minutes in seconds
 # Automatically refresh the expiration countdown timer every time the user clicks a page
 SESSION_SAVE_EVERY_REQUEST = True
 
-# Automatic post-authentication routing configurations
-LOGIN_URL = 'login'
+# Automatic post-authentication routing redirects
+LOGIN_URL = 'employee_login'
 LOGIN_REDIRECT_URL = 'dashboard'
-LOGOUT_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = 'employee_login'
+
+# Uses the console backend for absolute simplicity during evaluation.
+# Reset links will display inside your VS Code terminal running the server.
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

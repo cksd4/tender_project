@@ -4,11 +4,14 @@ from .models import UserProfile, MealOption
 
 class ExtendedRegistrationForm(UserCreationForm):
     """
-    Captures profile configurations safely during registration phases.
+    Ensures safe role assignment and field capture during public sign-up.
+    Forces email and phone number parameters to be mandatory.
     """
+    email = forms.EmailField(required=True, help_text="A valid email address is required.")
+
     class Meta(UserCreationForm.Meta):
         model = UserProfile
-        fields = UserCreationForm.Meta.fields + ('role', 'allergen_free_text')
+        fields = UserCreationForm.Meta.fields + ('email', 'phone_number', 'role', 'allergen_free_text')
 
 
 class MealOptionForm(forms.ModelForm):

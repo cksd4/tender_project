@@ -1,0 +1,32 @@
+{% extends 'catering/base.html' %}
+{% block content %}
+<div style="max-width: 450px; margin: 3rem auto;" class="ui-card">
+    <h1 style="color: var(--brand-primary); margin-top: 0;">Employee Hub</h1>
+    <p>Sign in below to place or manage your corporate meal orders.</p>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div role="alert" class="ui-alert ui-alert-error">{{ form.non_field_errors|striptags }}</div>
+        {% endif %}
+
+        <p>
+            <label for="id_username">Corporate Username</label>
+            <input type="text" name="username" required id="id_username" autocomplete="username">
+        </p>
+        <p>
+            <label for="id_password">Password</label>
+            <input type="password" name="password" required id="id_password" autocomplete="current-password">
+        </p>
+
+                <button type="submit" class="ui-btn" style="width: 100%; margin-top: 0.5rem;">Access Employee Dashboard</button>
+    </form>
+    
+    <!-- Clean, semantic class link block -->
+    <div class="auth-helper-links">
+        <p><a href="{% url 'password_reset' %}">Forgot my password?</a></p>
+        <p>Are you a partner vendor? <a href="{% url 'vendor_login' %}" style="color: var(--brand-warning); font-weight: bold;">Go to Vendor Portal →</a></p>
+    </div>
+</div>
+{% endblock %}
+

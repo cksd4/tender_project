@@ -129,6 +129,11 @@ body {
     font-size: 1rem;
     text-align: center;
     transition: opacity 0.15s ease;
+    line-height: 1.2;
+}
+
+form {
+    margin: 0;
 }
 
 .ui-btn:hover {
@@ -202,4 +207,22 @@ form select {
 
 .log-item:last-child {
     border-bottom: none;
+}
+
+/* Secondary Entry Utility Links */
+.auth-helper-links {
+    margin-top: 1.25rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.auth-helper-links a {
+    color: #64748b;
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.auth-helper-links a:hover {
+    color: var(--brand-primary);
+    text-decoration: underline;
 }

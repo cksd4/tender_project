@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 from .models import MealOption, Order
 from .forms import ExtendedRegistrationForm, MealOptionForm
+from catering import views
 
 def user_register(request):
     """Manages public profile signup cycles."""
@@ -25,17 +26,14 @@ def user_register(request):
 
 @login_required
 def dashboard(request):
-    """
-    Presents functional menu lists alongside individual user booking data history.
-    """
+    """Renders menu items, but routes admins out to their correct terminal space."""
+    if request.user.role == 'admin':
+        return redirect('admin_panel')
+        
     meals = MealOption.objects.filter(is_active=True)
     user_orders = Order.objects.filter(user=request.user).order_by('-created_at')
-    
-    context = {
-        'meals': meals,
-        'user_orders': user_orders,
-    }
-    return render(request, 'catering/dashboard.html', context)
+    return render(request, 'catering/dashboard.html', {'meals': meals, 'user_orders': user_orders})
+
 
 
 @login_required
