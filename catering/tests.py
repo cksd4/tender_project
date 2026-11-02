@@ -42,6 +42,94 @@ class TenderProjectTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Employee Hub')
 
+    def test_existing_users_can_still_log_in_with_username(self):
+        self.assertTrue(
+            self.client.login(
+                username='staffmember', password='securepassword1'
+            )
+        )
+
+    def test_registration_assigns_unique_usernames(self):
+        registration_data = {
+            'email': 'new.employee@example.com',
+            'first_name': 'New',
+            'last_name': 'Employee',
+            'phone_number': '07700000000',
+            'role': 'employee',
+            'allergen_free_text': '',
+            'password1': 'TenderPassword123!',
+            'password2': 'TenderPassword123!',
+        }
+
+        first_response = self.client.post(
+            reverse('register'), registration_data
+        )
+        registration_data['email'] = 'new.employee@another.example'
+        second_response = self.client.post(
+            reverse('register'), registration_data
+        )
+
+        first_user = User.objects.get(email='new.employee@example.com')
+        second_user = User.objects.get(email='new.employee@another.example')
+        self.assertRedirects(first_response, reverse('dashboard'))
+        self.assertRedirects(second_response, reverse('dashboard'))
+        self.assertTrue(first_user.username)
+        self.assertNotEqual(first_user.username, second_user.username)
+
+    def test_employee_can_register_and_log_in_with_email(self):
+        email = 'employee.login@example.com'
+        password = 'TenderPassword123!'
+        registration_response = self.client.post(reverse('register'), {
+            'email': email,
+            'first_name': 'Employee',
+            'last_name': 'Account',
+            'phone_number': '07700000000',
+            'role': 'employee',
+            'allergen_free_text': '',
+            'password1': password,
+            'password2': password,
+        })
+
+        user = User.objects.get(email=email)
+        self.assertEqual(user.role, 'employee')
+        self.assertRedirects(registration_response, reverse('dashboard'))
+        self.client.post(reverse('logout'))
+
+        login_response = self.client.post(
+            reverse('employee_login'),
+            {'username': email, 'password': password},
+            follow=True,
+        )
+
+        self.assertRedirects(login_response, reverse('dashboard'))
+        self.assertContains(login_response, 'Daily Catering Submissions Portal')
+
+    def test_registration_rejects_duplicate_email(self):
+        User.objects.create_user(
+            username='existinguser',
+            email='existing@example.com',
+            password='securepassword1',
+        )
+
+        response = self.client.post(reverse('register'), {
+            'email': 'existing@example.com',
+            'first_name': 'Existing',
+            'last_name': 'User',
+            'phone_number': '07700000000',
+            'role': 'employee',
+            'allergen_free_text': '',
+            'password1': 'TenderPassword123!',
+            'password2': 'TenderPassword123!',
+        })
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response, 'An account with this email address already exists.'
+        )
+        self.assertEqual(
+            User.objects.filter(email='existing@example.com').count(), 1
+        )
+
     def test_authenticated_page_loads_session_timeout_script(self):
         self.client.force_login(self.employee)
 
@@ -52,6 +140,29 @@ class TenderProjectTestCase(TestCase):
             f'data-idle-timeout-seconds="{settings.SESSION_COOKIE_AGE}"',
         )
         self.assertContains(response, 'assets/js/session_timeout.js')
+
+    def test_account_settings_displays_user_id_instead_of_username(self):
+        self.client.force_login(self.employee)
+
+        response = self.client.get(reverse('account_settings'))
+
+        self.assertContains(response, f'value="{self.employee.pk}"')
+        self.assertNotContains(response, 'Username (Fixed)')
+
+    def test_admin_orders_display_customer_user_id(self):
+        admin = User.objects.create_user(
+            username='cateringadmin', password='securepassword1', role='admin'
+        )
+        self.employee.first_name = 'Staff'
+        self.employee.save(update_fields=['first_name'])
+        Order.objects.create(user=self.employee, meal_option=self.meal)
+        self.client.force_login(admin)
+
+        response = self.client.get(reverse('admin_panel'))
+
+        self.assertContains(response, f'Account ID: {self.employee.pk}')
+        self.assertContains(response, 'Customer:</strong> Staff')
+        self.assertNotContains(response, f'Account:</strong> {self.employee.username}')
 
     def test_allergen_detection_logic(self):
         """Confirms backend allergen string loop processing performs accurate character scans."""
@@ -80,13 +191,22 @@ class TenderProjectTestCase(TestCase):
         self.assertRedirects(response, reverse('admin_panel'))
         self.assertFalse(MealOption.objects.filter(id=self.meal.id).exists())
 
-    def test_admin_cannot_remove_menu_option_used_by_orders(self):
+    def test_admin_can_remove_menu_option_used_by_orders_and_preserve_order(self):
         admin = User.objects.create_user(username='cateringadmin', password='securepassword1', role='admin')
-        Order.objects.create(user=self.employee, meal_option=self.meal)
+        order = Order.objects.create(user=self.employee, meal_option=self.meal)
         self.client.force_login(admin)
+
+        listing_response = self.client.get(reverse('admin_panel'))
+        self.assertContains(
+            listing_response,
+            reverse('delete_meal', args=[self.meal.id]),
+        )
 
         response = self.client.post(reverse('delete_meal', args=[self.meal.id]), follow=True)
 
         self.assertRedirects(response, reverse('admin_panel'))
-        self.assertTrue(MealOption.objects.filter(id=self.meal.id).exists())
-        self.assertContains(response, 'cannot be removed because it is used by existing orders')
+        self.assertFalse(MealOption.objects.filter(id=self.meal.id).exists())
+        order.refresh_from_db()
+        self.assertIsNone(order.meal_option)
+        self.assertEqual(order.meal_name, self.meal.name)
+        self.assertContains(response, f'Selection:</strong> {self.meal.name}')

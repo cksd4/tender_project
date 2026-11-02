@@ -18,14 +18,13 @@ class UserProfile(AbstractUser):
         help_text="Enter contact phone number"
     )
     allergen_free_text = models.CharField(
-        max_length=100, 
-        blank=True, 
+        max_length=100,
+        blank=True,
         help_text="Provide comma-separated values (e.g., peanuts, dairy, gluten)"
     )
 
     def __str__(self):
         return f"{self.username} - {self.get_role_display()}"
-
 
 class MealOption(models.Model):
     """
@@ -47,10 +46,22 @@ class Order(models.Model):
     Implements backend entity mapping to bridge User Profiles securely to Meal Choices.
     """
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='orders')
-    meal_option = models.ForeignKey(MealOption, on_delete=models.PROTECT, related_name='ordered_meals')
+    meal_name = models.CharField(max_length=100, blank=True, default='')
+    meal_option = models.ForeignKey(
+        MealOption,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='ordered_meals',
+    )
     order_date = models.DateField(default=timezone.now)
     special_instructions = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        if self.meal_option_id and not self.meal_name:
+            self.meal_name = self.meal_option.name
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"{self.user.username} reserved {self.meal_option.name} for {self.order_date}"
+        return f"{self.user.first_name} {self.user.last_name} reserved {self.meal_name} for {self.order_date}"

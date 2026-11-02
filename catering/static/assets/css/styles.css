@@ -136,6 +136,14 @@ form {
     margin: 0;
 }
 
+.logout-form {
+    display: inline;
+}
+
+.logout-form .ui-btn {
+    margin-left: 0.5rem;
+}
+
 .ui-btn:hover {
     opacity: 0.9;
 }

@@ -10,10 +10,11 @@
             <div role="alert" class="ui-alert ui-alert-error">{{ form.non_field_errors|striptags }}</div>
         {% endif %}
 
-        <p>
-            <label for="id_username">Corporate Username</label>
-            <input type="text" name="username" required id="id_username" autocomplete="username">
+                <p>
+            <label for="id_username">Corporate Email Address</label>
+            <input type="email" name="username" required id="id_username" autocomplete="email">
         </p>
+
         <p>
             <label for="id_password">Password</label>
             <input type="password" name="password" required id="id_password" autocomplete="current-password">

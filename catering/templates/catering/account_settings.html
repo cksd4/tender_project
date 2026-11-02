@@ -1,0 +1,49 @@
+{% extends 'catering/base.html' %}
+{% block content %}
+<header>
+    <h1>Account Configuration Settings</h1>
+    <p>Manage your corporate identity parameters, contact coordinates, and dietary profiles below.</p>
+</header>
+
+<div class="admin-split-layout" style="margin-top: 2rem;">
+    <!-- Profile Read/Update Panel Section -->
+    <section class="admin-col-form ui-card" aria-label="Modify Profile Parameters">
+        <h2>Update Personal Credentials</h2>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <p>
+                <label for="id_user_id">User ID (Fixed)</label>
+                <input type="text" id="id_user_id" value="{{ user.pk }}" disabled style="background-color: #e2e8f0; cursor: not-allowed;">
+            </p>
+            <p>
+                <label for="id_email">Email Address</label>
+                <input type="email" name="email" id="id_email" value="{{ user.email }}" required>
+            </p>
+            <p>
+                <label for="id_phone">Contact Phone Number</label>
+                <input type="text" name="phone_number" id="id_phone" value="{{ user.phone_number }}" required>
+            </p>
+            <p>
+                <label for="id_allergens">Dietary Allergens Profile</label>
+                <input type="text" name="allergen_free_text" id="id_allergens" value="{{ user.allergen_free_text }}">
+                <small style="color: #64748b;">Provide comma-separated listings (e.g., peanuts, dairy, gluten)</small>
+            </p>
+            <button type="submit" class="ui-btn ui-btn-success" style="width: 100%; margin-top: 1rem;">Apply Configuration Changes</button>
+        </form>
+    </section>
+
+    <!-- Absolute Account Destruction Panel Section -->
+    <section class="admin-col-logs ui-card" aria-label="Account Danger Zone Profile Closure">
+        <h2 style="color: var(--brand-danger);">Danger Zone</h2>
+        <p>Closing your profile removes your corporate catering identity and unlinks all scheduled bookings permanently across the enterprise network ledger.</p>
+
+        <div class="scroll-log-box" style="padding: 1.5rem; border-color: var(--brand-danger); background-color: #fff1f2;">
+            <p style="margin-top: 0; font-weight: bold; color: var(--brand-danger);">This action is irreversible.</p>
+            <form action="{% url 'delete_account' %}" method="post" onsubmit="return confirm('CRITICAL WARNING: Are you completely certain you want to permanently delete your account profile? All current bookings will be instantly terminated.')">
+                {% csrf_token %}
+                <button type="submit" class="ui-btn ui-btn-danger" style="width: 100%;">Permanently Close My Account</button>
+            </form>
+        </div>
+    </section>
+</div>
+{% endblock %}

@@ -15,11 +15,12 @@
         <a href="{% url 'dashboard' %}" class="nav-brand">Tender</a>
         <div class="nav-actions">
             {% if user.is_authenticated %}
-                <span class="user-status">User: <strong>{{ user.username }}</strong> ({{ user.role }})</span>
+                <span class="user-status">Welcome, <strong>{{ user.first_name }} {{ user.last_name }}</strong></span>
+                <a href="{% url 'account_settings' %}" style="text-decoration: underline; margin-right: 10px; margin-left: 10px;">Settings</a>
                 {% if user.role == 'admin' %}
                     <a href="{% url 'admin_panel' %}" class="ui-btn ui-btn-outline">Admin Actions</a>
                 {% endif %}
-                <form id="logout-form" method="post" action="{% url 'logout' %}">
+                <form method="post" action="{% url 'logout' %}" class="logout-form">
                     {% csrf_token %}
                     <button type="submit" class="ui-btn ui-btn-danger">Sign Out</button>
                 </form>

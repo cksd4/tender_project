@@ -12,5 +12,7 @@ urlpatterns = [
     path('admin-management/', views.admin_panel, name='admin_panel'),
         path('admin-management/edit/<int:meal_id>/', views.edit_meal, name='edit_meal'),
     path('admin-management/delete/<int:meal_id>/', views.delete_meal, name='delete_meal'),
+    path('account-settings/', views.account_settings, name='account_settings'),
+    path('account-settings/delete/', views.delete_account, name='delete_account'),
 
 ]

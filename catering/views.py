@@ -1,4 +1,3 @@
-import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -39,17 +38,9 @@ def dashboard(request):
 @login_required
 def place_order(request, meal_id):
     """
-    Compound statements evaluate current local time boundaries against strict constraints.
-    Features automated loop scans to detect custom allergen match conditions.
+    Creates an order and checks it against the user's allergen profile.
     """
     meal = get_object_or_404(MealOption, id=meal_id)
-    current_time = datetime.datetime.now().time()
-    cutoff_time = datetime.time(10, 0, 0) # 10:00 AM Strict Policy Constraint
-
-    # Compound Conditional Checks (1.4)
-    if current_time > cutoff_time:
-        messages.error(request, "Order Processing Halted: The daily 10:00 AM ordering deadline has passed.")
-        return redirect('dashboard')
 
     # Sequential Loop Verification to extract matching allergy profiles
     user_allergens = [item.strip().lower() for item in request.user.allergen_free_text.split(',') if item]
@@ -62,7 +53,11 @@ def place_order(request, meal_id):
             break # Optimized performance break step
 
     # Invoke secure ORM commit action (1.2)
-    Order.objects.create(user=request.user, meal_option=meal)
+    Order.objects.create(
+        user=request.user,
+        meal_option=meal,
+        meal_name=meal.name,
+    )
 
     # Real-Time UI Feedback Generation (2.3)
     if has_allergy_risk:
@@ -145,11 +140,47 @@ def delete_meal(request, meal_id):
         return redirect('dashboard')
         
     meal = get_object_or_404(MealOption, id=meal_id)
-    if meal.ordered_meals.exists():
-        messages.error(request, f"'{meal.name}' cannot be removed because it is used by existing orders.")
-        return redirect('admin_panel')
-
     meal_name = meal.name
     meal.delete()
     messages.info(request, f"Menu option '{meal_name}' has been deleted.")
     return redirect('admin_panel')
+
+@login_required
+def account_settings(request):
+    """
+    Handles READ and UPDATE functionality for individual user profiles.
+    Allows changing email, phone number, and allergen specifications safely.
+    """
+    if request.method == 'POST':
+        # Capture updated information using basic clean mapping logic
+        user = request.user
+        email_input = request.POST.get('email', '').strip()
+        phone_input = request.POST.get('phone_number', '').strip()
+        allergen_input = request.POST.get('allergen_free_text', '').strip()
+
+        # Enforce basic validation constraints (1.4)
+        if not email_input or not phone_input:
+            messages.error(request, "Update Rejected: Email and Phone Number parameters are mandatory.")
+        else:
+            user.email = email_input
+            user.phone_number = phone_input
+            user.allergen_free_text = allergen_input
+            user.save() # Commit changes directly via Django ORM (1.2)
+            messages.success(request, "Your account configurations have updated smoothly.")
+            return redirect('account_settings')
+
+    return render(request, 'catering/account_settings.html')
+
+@login_required
+def delete_account(request):
+    """
+    Handles the DELETE lifecycle for the user record.
+    Purges user session tracking completely upon structural account removal.
+    """
+    if request.method == 'POST':
+        user = request.user
+        user.delete() # Triggers cascading removal of associated orders cleanly via database constraints (2.1)
+        messages.info(request, "Your enterprise account profile has been completely deleted.")
+        return redirect('employee_login')
+
+    return redirect('account_settings')

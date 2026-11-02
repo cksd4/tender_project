@@ -44,6 +44,7 @@ DATABASES = {
 
 # Route system authentication processing to your custom user table profiles
 AUTH_USER_MODEL = 'catering.UserProfile'
+AUTHENTICATION_BACKENDS = ['catering.auth_backends.EmailOrUsernameBackend']
 
 TEMPLATES = [
     {

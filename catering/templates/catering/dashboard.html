@@ -38,7 +38,7 @@
             {% for order in user_orders %}
                 <li style="border-bottom: 1px solid var(--border-color); padding: 1rem 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                     <div>
-                        <strong style="color: var(--brand-primary);">{{ order.meal_option.name }}</strong>
+                        <strong style="color: var(--brand-primary);">{{ order.meal_name }}</strong>
                         <small style="display: block; color: #64748b;">Registered: {{ order.created_at|date:"d M Y H:i" }}</small>
                     </div>
                     <a href="{% url 'cancel_order' order.id %}" class="ui-btn ui-btn-danger">Revoke Request</a>
