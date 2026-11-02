@@ -11,6 +11,8 @@ Tender (`tender_project`) is an accessible, responsive full-stack Django web app
 ### Design Rationale
 The front-end design is engineered mobile-first to accommodate employees on the go. Layout boundaries adapt using a fluid grid structure (CSS Grid & Flexbox) to prevent overlapping layout breaks across small Viewport displays.
 
+Bootstrap utilities are integrated to manage responsive column breakpoints and maintain UI consistency across the application.
+
 ### Accessibility Safeguards (WCAG Compliance)
 - **High Contrast Framework:** All text components maintain strict contrast levels against backgrounds.
 - **Screen Reader Readiness:** Form inputs use explicit `<label>` declarations and structural visual fallbacks use `visually-hidden` descriptions.
