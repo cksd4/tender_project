@@ -69,7 +69,44 @@ python manage.py test
 
 ---
 
-## 🚀 5. Secure Deployment Checklist (Rubric 5.2, 6.2, 6.3)
+## 🧭 5. Wireframe Section
+
+### Core User Flow Wireframe
+
+```text
++--------------------------------------------------------------+
+| Tender                                                       |
+| [Login] [Register] [Admin]                                   |
++--------------------------------------------------------------+
+|                                                              |
+| Employee Dashboard                                            |
+| ------------------------------------------------------------ |
+| Welcome, [Name]                                              |
+| [Meal Card] [Meal Card] [Meal Card]                          |
+| [Order Summary]                                              |
+|                                                              |
+| Admin Panel                                                   |
+| ------------------------------------------------------------ |
+| Publish New Meal Option                                       |
+| [Name] [Description] [Vendor] [Price] [Status]               |
+|                                                              |
+| Manage Menu Options                                           |
+| [Meal Name] [Edit] [Remove]                                  |
+| [Meal Name] [Edit] [Remove]                                  |
++--------------------------------------------------------------+
+```
+
+### Page Structure Overview
+
+- **Login / Register Page**: user authentication and account creation
+- **Employee Dashboard**: meal selection, order summary, allergy details
+- **Admin Panel**: menu publishing and menu item management
+- **Edit Meal Page**: update existing meal information
+- **Order Confirmation**: success or validation warning states
+
+---
+
+## 🚀 6. Secure Deployment Checklist (Rubric 5.2, 6.2, 6.3)
 
 1. Set up a secure configuration configuration layout by excluding credentials using `.gitignore`.
 2. Isolate internal keys into an independent `.env` environment file.
@@ -80,7 +117,7 @@ python manage.py test
 
 ---
 
-## 🤖 6. AI Tools Orchestration & Reflections (Rubric LO8)
+## 🤖 7. AI Tools Orchestration & Reflections (Rubric LO8)
 
 ### 8.1 Code Creation Support
 - **Application Workflow:** GitHub Copilot assisted in structuring boilerplate fields inside `forms.py` and configuring the initial `AbstractUser` properties.
