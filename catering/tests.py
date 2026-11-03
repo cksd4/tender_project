@@ -182,6 +182,22 @@ class TenderProjectTestCase(TestCase):
         self.assertContains(response, reverse('edit_meal', args=[self.meal.id]))
         self.assertContains(response, reverse('delete_meal', args=[self.meal.id]))
 
+    def test_superuser_can_access_django_and_catering_admin(self):
+        superuser = User.objects.create_superuser(
+            username='projectroot',
+            email='projectroot@example.com',
+            password='securepassword1',
+        )
+        self.client.force_login(superuser)
+
+        django_admin_response = self.client.get(reverse('admin:index'))
+        dashboard_response = self.client.get(reverse('dashboard'))
+        catering_admin_response = self.client.get(reverse('admin_panel'))
+
+        self.assertEqual(django_admin_response.status_code, 200)
+        self.assertRedirects(dashboard_response, reverse('admin_panel'))
+        self.assertEqual(catering_admin_response.status_code, 200)
+
     def test_admin_can_remove_menu_option_without_orders(self):
         admin = User.objects.create_user(username='cateringadmin', password='securepassword1', role='admin')
         self.client.force_login(admin)

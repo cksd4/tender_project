@@ -5,7 +5,7 @@
     <p>Please note: All modifications require completion before the daily <span class="ui-badge">10:00 AM Constraint Rule</span>.</p>
 </header>
 
-<section aria-label="Available Foods Matrix" style="margin-top: 2rem;">
+<section class="dashboard-menu-section" aria-label="Available Foods Matrix">
     <h2>Active Food Profiles</h2>
     <div class="meal-grid">
         {% for meal in meals %}
@@ -14,15 +14,15 @@
                     <h3>{{ meal.name }}</h3>
                     <p>{{ meal.description }}</p>
                     <p><strong>Provider:</strong> {{ meal.vendor }}</p>
-                    <p style="font-size: 1.25rem; font-weight: bold; margin: 0.5rem 0;">Cost: £{{ meal.price }}</p>
+                    <p class="meal-price">Cost: £{{ meal.price }}</p>
                     
                     {% if meal.contains_allergens %}
-                        <div class="ui-alert ui-alert-warning" style="padding: 0.5rem; font-size: 0.9rem; margin-bottom: 1rem;">
+                        <div class="ui-alert ui-alert-warning meal-allergen-note">
                             ⚠️ Allergens: {{ meal.contains_allergens }}
                         </div>
                     {% endif %}
                     
-                    <a href="{% url 'place_order' meal.id %}" class="ui-btn" style="margin-top: auto;">Submit Reservation</a>
+                    <a href="{% url 'place_order' meal.id %}" class="ui-btn meal-reserve-button">Submit Reservation</a>
                 </div>
             </article>
         {% empty %}
@@ -31,20 +31,20 @@
     </div>
 </section>
 
-<section aria-label="Historical Order Records" style="margin-top: 3rem;">
+<section class="dashboard-orders-section" aria-label="Historical Order Records">
     <h2>Your Tracked Submissions</h2>
     <div class="ui-card">
-        <ul style="list-style: none; padding: 0; margin: 0;">
+        <ul class="customer-order-list">
             {% for order in user_orders %}
-                <li style="border-bottom: 1px solid var(--border-color); padding: 1rem 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <li class="customer-order-item">
                     <div>
-                        <strong style="color: var(--brand-primary);">{{ order.meal_name }}</strong>
-                        <small style="display: block; color: #64748b;">Registered: {{ order.created_at|date:"d M Y H:i" }}</small>
+                        <strong class="customer-order-name">{{ order.meal_name }}</strong>
+                        <small class="customer-order-date">Registered: {{ order.created_at|date:"d M Y H:i" }}</small>
                     </div>
                     <a href="{% url 'cancel_order' order.id %}" class="ui-btn ui-btn-danger">Revoke Request</a>
                 </li>
             {% empty %}
-                <li style="color: #64748b; padding: 1rem 0;">You have no logged meal options pending execution.</li>
+                <li class="empty-customer-orders">You have no logged meal options pending execution.</li>
             {% endfor %}
         </ul>
     </div>

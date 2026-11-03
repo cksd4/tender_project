@@ -4,12 +4,8 @@ from django.utils.text import slugify
 from .models import UserProfile, MealOption
 
 class ExtendedRegistrationForm(UserCreationForm):
-    """
-    Handles email-centric signups, eliminating default username entry parameters.
-    """
     class Meta(UserCreationForm.Meta):
         model = UserProfile
-        # Remove username entirely; capture personalization elements explicitly
         fields = ['email', 'first_name', 'last_name', 'phone_number', 'role', 'allergen_free_text']
 
     def clean_email(self):
@@ -39,9 +35,6 @@ class ExtendedRegistrationForm(UserCreationForm):
 
 
 class MealOptionForm(forms.ModelForm):
-    """
-    Backend mapping form enabling Admin profiles to execute Create/Update CRUD securely.
-    """
     class Meta:
         model = MealOption
         fields = ['name', 'description', 'vendor', 'price', 'contains_allergens', 'is_active']

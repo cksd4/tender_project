@@ -9,46 +9,46 @@
         <form method="post" novalidate>
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="ui-btn ui-btn-success" style="width: 100%; margin-top: 1rem;">Publish to Menu</button>
+            <button type="submit" class="ui-btn ui-btn-success action-full settings-submit">Publish to Menu</button>
         </form>
     </section>
 
     <!-- Global Monitoring Activity Logs Box -->
     <section class="admin-col-logs ui-card" aria-label="System Order Monitoring Ledger">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <div class="admin-order-heading">
             <h2>Global Enterprise Orders</h2>
-            <span class="ui-badge" style="background-color: var(--brand-primary);">Total Count: {{ all_orders.count }}</span>
+            <span class="ui-badge ui-badge-primary">Total Count: {{ all_orders.count }}</span>
         </div>
         
         <div class="scroll-log-box">
             {% for order in all_orders %}
                 <div class="log-item">
-                    <p style="margin: 0 0 0.25rem 0;"><strong>Customer:</strong> {{ order.user.first_name }} <span>(Account ID: {{ order.user.pk }})</span></p>
-                    <p style="margin: 0 0 0.5rem 0; color: var(--brand-primary);"><strong>Selection:</strong> {{ order.meal_name }}</p>
-                    <small style="color: #64748b;">Logged Timestamp: {{ order.created_at }}</small>
+                    <p class="admin-order-customer"><strong>Customer:</strong> {{ order.user.first_name }} <span>(Account ID: {{ order.user.pk }})</span></p>
+                    <p class="admin-order-selection"><strong>Selection:</strong> {{ order.meal_name }}</p>
+                    <small class="muted-text">Logged Timestamp: {{ order.created_at }}</small>
                 </div>
             {% empty %}
-                <div style="padding: 2rem; text-align: center; color: #64748b;">No transactions captured across the target enterprise network environment.</div>
+                <div class="empty-order-log">No transactions captured across the target enterprise network environment.</div>
             {% endfor %}
         </div>
     </section>
 </div>
 
-<section class="ui-card" aria-label="Menu option management" style="margin-top: 2rem;">
+<section class="ui-card admin-menu-section" aria-label="Menu option management">
     <h2>Manage Menu Options</h2>
     <div class="scroll-log-box">
         {% for meal in all_meals %}
-            <div class="log-item" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div class="log-item admin-menu-item">
                 <div>
                     <strong>{{ meal.name }}</strong>
                     <span class="ui-badge">{% if meal.is_active %}Active{% else %}Inactive{% endif %}</span>
                     {% if meal.order_count %}
-                        <small style="display: block; color: #64748b;">Used by {{ meal.order_count }} order{{ meal.order_count|pluralize }}; order history will be retained.</small>
+                        <small class="menu-order-note">Used by {{ meal.order_count }} order{{ meal.order_count|pluralize }}; order history will be retained.</small>
                     {% endif %}
                 </div>
-                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <div class="admin-menu-actions">
                     <a href="{% url 'edit_meal' meal.id %}" class="ui-btn">Edit</a>
-                    <form method="post" action="{% url 'delete_meal' meal.id %}" style="margin: 0;">
+                    <form method="post" action="{% url 'delete_meal' meal.id %}">
                         {% csrf_token %}
                         <button type="submit" class="ui-btn ui-btn-danger">Remove</button>
                     </form>

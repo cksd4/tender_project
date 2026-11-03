@@ -16,7 +16,7 @@
         <div class="nav-actions">
             {% if user.is_authenticated %}
                 <span class="user-status">Welcome, <strong>{{ user.first_name }} {{ user.last_name }}</strong></span>
-                <a href="{% url 'account_settings' %}" style="text-decoration: underline; margin-right: 10px; margin-left: 10px;">Settings</a>
+                <a href="{% url 'account_settings' %}" class="nav-settings-link">Settings</a>
                 {% if user.role == 'admin' %}
                     <a href="{% url 'admin_panel' %}" class="ui-btn ui-btn-outline">Admin Actions</a>
                 {% endif %}

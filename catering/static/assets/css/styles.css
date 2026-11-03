@@ -187,6 +187,7 @@ form p {
 }
 
 form input[type="text"],
+form input[type="email"],
 form input[type="number"],
 form input[type="password"],
 form textarea,
@@ -233,4 +234,212 @@ form select {
 .auth-helper-links a:hover {
     color: var(--brand-primary);
     text-decoration: underline;
+}
+
+.nav-settings-link {
+    margin: 0 10px;
+    text-decoration: underline;
+}
+
+.settings-layout,
+.admin-menu-section,
+.dashboard-menu-section {
+    margin-top: 2rem;
+}
+
+.settings-user-id {
+    background-color: #e2e8f0;
+    cursor: not-allowed;
+}
+
+.muted-text,
+.menu-order-note,
+.customer-order-date {
+    color: #64748b;
+}
+
+.settings-submit {
+    margin-top: 1rem;
+}
+
+.danger-heading,
+.danger-warning {
+    color: var(--brand-danger);
+}
+
+.danger-panel {
+    padding: 1.5rem;
+    border-color: var(--brand-danger);
+    background-color: #fff1f2;
+}
+
+.danger-warning {
+    margin-top: 0;
+    font-weight: bold;
+}
+
+.action-full {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.action-top-small {
+    margin-top: 0.5rem;
+}
+
+.action-top-medium {
+    margin-top: 1rem;
+}
+
+.admin-order-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.ui-badge-primary {
+    background-color: var(--brand-primary);
+}
+
+.admin-order-customer {
+    margin: 0 0 0.25rem;
+}
+
+.admin-order-selection {
+    margin: 0 0 0.5rem;
+    color: var(--brand-primary);
+}
+
+.empty-order-log {
+    padding: 2rem;
+    color: #64748b;
+    text-align: center;
+}
+
+.admin-menu-item,
+.customer-order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.admin-menu-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.admin-menu-actions form {
+    margin: 0;
+}
+
+.dashboard-orders-section {
+    margin-top: 3rem;
+}
+
+.meal-price {
+    margin: 0.5rem 0;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.meal-allergen-note {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.meal-reserve-button {
+    margin-top: auto;
+}
+
+.customer-order-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.customer-order-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.customer-order-name {
+    color: var(--brand-primary);
+}
+
+.customer-order-date,
+.menu-order-note {
+    display: block;
+}
+
+.empty-customer-orders {
+    padding: 1rem 0;
+    color: #64748b;
+}
+
+.edit-meal-card {
+    max-width: 600px;
+    margin: 3rem auto;
+}
+
+.edit-meal-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.edit-meal-actions .ui-btn {
+    flex: 1;
+}
+
+.ui-btn-secondary {
+    background-color: #64748b;
+}
+
+.auth-panel {
+    max-width: 450px;
+    margin: 3rem auto;
+}
+
+.auth-panel-wide {
+    max-width: 500px;
+}
+
+.auth-heading-primary,
+.auth-heading-success,
+.auth-heading-warning {
+    margin-top: 0;
+}
+
+.auth-heading-primary,
+.link-primary {
+    color: var(--brand-primary);
+}
+
+.auth-heading-success {
+    color: var(--brand-success);
+}
+
+.auth-heading-warning,
+.link-warning {
+    color: var(--brand-warning);
+}
+
+.link-warning {
+    font-weight: bold;
+}
+
+.development-note {
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.vendor-login-panel {
+    border-top: 4px solid var(--brand-warning);
 }

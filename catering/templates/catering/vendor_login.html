@@ -1,7 +1,7 @@
 {% extends 'catering/base.html' %}
 {% block content %}
-<div style="max-width: 450px; margin: 3rem auto;" class="ui-card" style="border-top: 4px solid var(--brand-warning);">
-    <h1 style="color: var(--brand-warning); margin-top: 0;">Vendor Management Portal</h1>
+<div class="ui-card auth-panel vendor-login-panel">
+    <h1 class="auth-heading-warning">Vendor Management Portal</h1>
     <p>Sign in to publish your daily surplus specials and monitor order metrics.</p>
 
     <form method="post" novalidate>
@@ -19,13 +19,13 @@
             <input type="password" name="password" required id="id_password" autocomplete="current-password">
         </p>
 
-                <button type="submit" class="ui-btn ui-btn-success" style="width: 100%; margin-top: 0.5rem;">Secure Vendor Sign In</button>
+                <button type="submit" class="ui-btn ui-btn-success action-full action-top-small">Secure Vendor Sign In</button>
     </form>
 
     <!-- Clean, semantic class link block -->
     <div class="auth-helper-links">
         <p><a href="{% url 'password_reset' %}">Forgot my password?</a></p>
-        <p>Looking for lunch? <a href="{% url 'employee_login' %}" style="color: var(--brand-primary);">Go to Corporate Employee Portal</a></p>
+        <p>Looking for lunch? <a href="{% url 'employee_login' %}" class="link-primary">Go to Corporate Employee Portal</a></p>
     </div>
 </div>
 {% endblock %}
