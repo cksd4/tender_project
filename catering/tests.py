@@ -38,9 +38,12 @@ class TenderProjectTestCase(TestCase):
 
     def test_employee_login_page_renders(self):
         response = self.client.get(reverse('employee_login'))
+        legacy_response = self.client.get('/login/')
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Employee Hub')
+        self.assertEqual(legacy_response.status_code, 200)
+        self.assertContains(legacy_response, 'Employee Hub')
 
     def test_existing_users_can_still_log_in_with_username(self):
         self.assertTrue(
