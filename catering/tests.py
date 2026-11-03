@@ -232,6 +232,31 @@ class TenderProjectTestCase(TestCase):
         self.assertContains(add_user_response, 'name="email"')
         self.assertNotContains(add_user_response, 'name="username"')
 
+    def test_admin_login_accepts_csrf_from_heroku_https_proxy(self):
+        client = Client(
+            enforce_csrf_checks=True,
+            HTTP_HOST='tender-project-app-5c9139cbd71b.herokuapp.com',
+            HTTP_X_FORWARDED_PROTO='https',
+        )
+        login_url = reverse('admin:login')
+        origin = 'https://tender-project-app-5c9139cbd71b.herokuapp.com'
+        login_page = client.get(login_url, {'next': reverse('admin:index')})
+
+        response = client.post(
+            login_url,
+            {
+                'email': 'nobody@example.com',
+                'password': 'invalid-password',
+                'next': reverse('admin:index'),
+                'csrfmiddlewaretoken': client.cookies['csrftoken'].value,
+            },
+            HTTP_ORIGIN=origin,
+        )
+
+        self.assertEqual(login_page.status_code, 200)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Enter a correct email address and password.')
+
     def test_admin_can_remove_menu_option_without_orders(self):
         admin = User.objects.create_user(
             email='cateringadmin@example.com',

@@ -13,6 +13,10 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 # Allow localized hosting alongside generic production domains
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com',] 
+CSRF_TRUSTED_ORIGINS = [
+    'https://tender-project-app-5c9139cbd71b.herokuapp.com',
+]
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 ROOT_URLCONF = 'tender_project.urls'
 
 INSTALLED_APPS = [
