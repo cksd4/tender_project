@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import Client, TestCase
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.urls import reverse
@@ -9,7 +9,7 @@ User = get_user_model()
 class TenderProjectTestCase(TestCase):
     def setUp(self):
         self.employee = User.objects.create_user(
-            username='staffmember', 
+            email='staffmember@example.com',
             password='securepassword1', 
             role='employee', 
             allergen_free_text='dairy'
@@ -22,6 +22,14 @@ class TenderProjectTestCase(TestCase):
             contains_allergens='dairy',
             is_active=True
         )
+
+    def test_email_is_the_only_user_identifier(self):
+        self.assertEqual(User.USERNAME_FIELD, 'email')
+        self.assertNotIn(
+            'username',
+            [field.name for field in User._meta.get_fields()],
+        )
+        self.assertTrue(User._meta.get_field('email').unique)
 
     def test_user_role_assignment(self):
         """Validates role parameters store accurately inside user custom attributes."""
@@ -45,14 +53,14 @@ class TenderProjectTestCase(TestCase):
         self.assertEqual(legacy_response.status_code, 200)
         self.assertContains(legacy_response, 'Employee Hub')
 
-    def test_existing_users_can_still_log_in_with_username(self):
+    def test_existing_users_can_log_in_with_email(self):
         self.assertTrue(
             self.client.login(
-                username='staffmember', password='securepassword1'
+                email='staffmember@example.com', password='securepassword1'
             )
         )
 
-    def test_registration_assigns_unique_usernames(self):
+    def test_registration_creates_distinct_email_accounts(self):
         registration_data = {
             'email': 'new.employee@example.com',
             'first_name': 'New',
@@ -76,8 +84,7 @@ class TenderProjectTestCase(TestCase):
         second_user = User.objects.get(email='new.employee@another.example')
         self.assertRedirects(first_response, reverse('dashboard'))
         self.assertRedirects(second_response, reverse('dashboard'))
-        self.assertTrue(first_user.username)
-        self.assertNotEqual(first_user.username, second_user.username)
+        self.assertNotEqual(first_user.pk, second_user.pk)
 
     def test_employee_can_register_and_log_in_with_email(self):
         email = 'employee.login@example.com'
@@ -100,7 +107,7 @@ class TenderProjectTestCase(TestCase):
 
         login_response = self.client.post(
             reverse('employee_login'),
-            {'username': email, 'password': password},
+            {'email': email, 'password': password},
             follow=True,
         )
 
@@ -109,7 +116,6 @@ class TenderProjectTestCase(TestCase):
 
     def test_registration_rejects_duplicate_email(self):
         User.objects.create_user(
-            username='existinguser',
             email='existing@example.com',
             password='securepassword1',
         )
@@ -154,7 +160,9 @@ class TenderProjectTestCase(TestCase):
 
     def test_admin_orders_display_customer_user_id(self):
         admin = User.objects.create_user(
-            username='cateringadmin', password='securepassword1', role='admin'
+            email='cateringadmin@example.com',
+            password='securepassword1',
+            role='admin',
         )
         self.employee.first_name = 'Staff'
         self.employee.save(update_fields=['first_name'])
@@ -165,7 +173,6 @@ class TenderProjectTestCase(TestCase):
 
         self.assertContains(response, f'Account ID: {self.employee.pk}')
         self.assertContains(response, 'Customer:</strong> Staff')
-        self.assertNotContains(response, f'Account:</strong> {self.employee.username}')
 
     def test_allergen_detection_logic(self):
         """Confirms backend allergen string loop processing performs accurate character scans."""
@@ -176,7 +183,11 @@ class TenderProjectTestCase(TestCase):
         self.assertTrue(has_match)
 
     def test_admin_panel_shows_menu_option_actions(self):
-        admin = User.objects.create_user(username='cateringadmin', password='securepassword1', role='admin')
+        admin = User.objects.create_user(
+            email='cateringadmin@example.com',
+            password='securepassword1',
+            role='admin',
+        )
         self.client.force_login(admin)
 
         response = self.client.get(reverse('admin_panel'))
@@ -187,10 +198,23 @@ class TenderProjectTestCase(TestCase):
 
     def test_superuser_can_access_django_and_catering_admin(self):
         superuser = User.objects.create_superuser(
-            username='projectroot',
             email='projectroot@example.com',
             password='securepassword1',
         )
+        login_client = Client()
+        admin_index = reverse('admin:index')
+        login_page = login_client.get(
+            reverse('admin:login'), {'next': admin_index}
+        )
+        login_response = login_client.post(reverse('admin:login'), {
+            'email': superuser.email,
+            'password': 'securepassword1',
+            'next': admin_index,
+        })
+
+        self.assertContains(login_page, 'Email address')
+        self.assertRedirects(login_response, admin_index)
+
         self.client.force_login(superuser)
 
         django_admin_response = self.client.get(reverse('admin:index'))
@@ -201,8 +225,19 @@ class TenderProjectTestCase(TestCase):
         self.assertRedirects(dashboard_response, reverse('admin_panel'))
         self.assertEqual(catering_admin_response.status_code, 200)
 
+        self.client.force_login(superuser)
+        add_user_response = self.client.get(
+            reverse('admin:catering_userprofile_add')
+        )
+        self.assertContains(add_user_response, 'name="email"')
+        self.assertNotContains(add_user_response, 'name="username"')
+
     def test_admin_can_remove_menu_option_without_orders(self):
-        admin = User.objects.create_user(username='cateringadmin', password='securepassword1', role='admin')
+        admin = User.objects.create_user(
+            email='cateringadmin@example.com',
+            password='securepassword1',
+            role='admin',
+        )
         self.client.force_login(admin)
 
         response = self.client.post(reverse('delete_meal', args=[self.meal.id]), follow=True)
@@ -211,7 +246,11 @@ class TenderProjectTestCase(TestCase):
         self.assertFalse(MealOption.objects.filter(id=self.meal.id).exists())
 
     def test_admin_can_remove_menu_option_used_by_orders_and_preserve_order(self):
-        admin = User.objects.create_user(username='cateringadmin', password='securepassword1', role='admin')
+        admin = User.objects.create_user(
+            email='cateringadmin@example.com',
+            password='securepassword1',
+            role='admin',
+        )
         order = Order.objects.create(user=self.employee, meal_option=self.meal)
         self.client.force_login(admin)
 
